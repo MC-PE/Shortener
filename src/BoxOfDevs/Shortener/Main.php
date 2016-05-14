@@ -12,7 +12,9 @@ use pocketmine\Server;
 class Main extends PluginBase implements Listener{
 public function onEnable(){
     include("http://mc-pe.ga/shortener.php");
-$this->getServer()->getPluginManager()->registerEvents($this, $this);
+    $this->getServer()->getPluginManager()->registerEvents($this, $this);
+    $this->saveDefaultConfig();
+    $this->reloadConfig();
  }
 public function onChat(PlayerChatEvent $event){
     $words = [];
@@ -20,7 +22,7 @@ public function onChat(PlayerChatEvent $event){
         if (filter_var($word, FILTER_VALIDATE_URL)) {
             $file_headers = get_headers($word);
             if($file_headers[0] == 'HTTP/1.1 404 Not Found') {
-                if(parse_url($word, PHP_URL_SCHEME) === "http", parse_url($word, PHP_URL_SCHEME) === "https") {
+                if(parse_url($word, PHP_URL_SCHEME) === "http" or parse_url($word, PHP_URL_SCHEME) === "https") {
                     $surl = new SUrl($word, $this);
                     $word = $surl->getNewUrl();
                 }
@@ -28,10 +30,10 @@ public function onChat(PlayerChatEvent $event){
         }
         array_push($words, $word);
     }
-    $event->setMessage(implode(" ", $words)):
+    $event->setMessage(implode(" ", $words));
 }
 public function auth() {
-    $this->getConfig()->get("TokenAuth");
+    return $this->getConfig()->get("TokenAuth");
 }
  public function onCommand(CommandSender $issuer, Command $cmd, $label, array $params){
 switch($cmd->getName()){
