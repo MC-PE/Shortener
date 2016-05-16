@@ -1,21 +1,21 @@
 <?php
 class SUrl {
-    public function __construct($url, $main) {
+    public function __construct($url, $auth) {
         $this->url = $url;
-        $this->main = $main;
+        $this->auth = $auth;
         $this->iniUrl();
     }
     public function iniUrl() {
-        $log = $this->main->auth();
+        $log = $this->auth;
         foreach(unserialize("login") as $logs) {
             if(sha1($log['username']) === $logs['username'] and sha1($log['password']) === $logs['password']) {
-                $id = count(scandir(".")) - 6; // index.php, shortner.php, logins,  example.php
+                $id = count(scandir(".")) - 7; // index.php, shortner.php, logins,  example.php
                 mkdir($id);
                 $contents = str_ireplace("€url", $url, file_get_contents("example.php")); // why € ? because $ was taken + random xD
                 file_put_contents($id. DIRECTORY_SEPARATOR . "index.php", $contents);
                 file_put_contents($id. DIRECTORY_SEPARATOR . "clicks", "0");
                 $authed = true;
-                $this->newurl = "http://mc-pe.ga/".$id."/index.php";
+                $this->newurl = "http://mc-pe.ga/".$id."/";
             }
         }
         if(!isset($authed)) {
