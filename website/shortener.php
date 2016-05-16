@@ -7,22 +7,23 @@ class SUrl {
     }
     public function iniUrl() {
         $log = $this->auth;
-        foreach(unserialize("login") as $logs) {
+        echo unserialize('logins');
+        foreach(unserialize(file_get_contents("logins")) as $logs) {
             if(sha1($log['username']) === $logs['username'] and sha1($log['password']) === $logs['password']) {
-                $id = count(scandir(".")) - 7; // index.php, shortner.php, logins,  example.php
-                mkdir($id);
-                $contents = str_ireplace("€url", $url, file_get_contents("example.php")); // why € ? because $ was taken + random xD
-                file_put_contents($id. DIRECTORY_SEPARATOR . "index.php", $contents);
-                file_put_contents($id. DIRECTORY_SEPARATOR . "clicks", "0");
+                $this->id = count(scandir(".")) - 7; // index.php, shortner.php, logins,  example.php
+                mkdir($this->id);
+                $contents = str_ireplace("€url", $this->url, file_get_contents("example.php")); // why € ? because $ was taken + random xD
+                file_put_contents($this->id . DIRECTORY_SEPARATOR . "index.php", $contents);
+                file_put_contents($this->id . DIRECTORY_SEPARATOR . "clicks", "0");
                 $authed = true;
-                $this->newurl = "http://mc-pe.ga/".$id."/";
+                $this->newurl = $id;
             }
         }
         if(!isset($authed)) {
             $this->newurl = $this->url . "  (Invalid Shortener logins ! Please inform server owner about this ! )";
         }
     }
-    public function getNewUrl() {
+    public function getId() {
         return $this->newurl;
     }
 }
